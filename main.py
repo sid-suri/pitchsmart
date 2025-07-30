@@ -1,45 +1,86 @@
+
+import os
 import csv
+import json
+import base64
 import gspread
+import pytz
 from io import StringIO
+from datetime import datetime
+from dotenv import load_dotenv
 from oauth2client.service_account import ServiceAccountCredentials
 from flask import Flask, request, render_template, session, redirect, url_for, flash, Response
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
-from datetime import datetime
-import pytz
 
+# 🌱 Load environment
+load_dotenv()
+
+# 🔐 Load and decode base64 credentials
+creds_b64 = os.getenv("GOOGLE_CREDENTIALS_BASE64")
+print("🔍 ENV CHECK:", creds_b64 is not None)
+
+if not creds_b64:
+    raise ValueError("❌ GOOGLE_CREDENTIALS_BASE64 is not set or empty!")
+
+try:
+    creds_json = base64.b64decode(creds_b64).decode("utf-8")
+    creds_dict = json.loads(creds_json)
+
+    # Ensure private_key has actual line breaks
+    if isinstance(creds_dict.get("private_key"), str):
+        creds_dict["private_key"] = creds_dict["private_key"].replace("\n", "\n".replace("\\n", "\n")).replace("\n", "\n").replace("\n", "\n").replace("\n", "\n").replace("\n", "\n").replace("\n", "\n").replace("\n", "\n").replace("\n", "\n").replace("\n", "\n").replace("\n", "\n").replace("\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace("\n", "\n").replace("\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace("\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n").replace("\\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace("\n", "\n").replace("\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace("\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
+
+except Exception as e:
+    raise ValueError(f"❌ Failed to load and decode GOOGLE_CREDENTIALS_BASE64: {e}")
+
+# Google Sheets auth
+scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+credentials = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+client = gspread.authorize(credentials)
+spreadsheet = client.open("PitchSmart Log")
+
+# Flask App Init
 app = Flask(__name__)
 app.secret_key = "super-secret-key"
 
-# 🔐 Login Manager setup
+# Flask-Login Setup
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
 
-# Google Sheets Setup
-SHEET_NAME = "PitchSmart Log"
 USER_SHEET_TAB = "Users"
 
-scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name("credentials.json", scope)
-client = gspread.authorize(creds)
-spreadsheet = client.open(SHEET_NAME)
-
-# 🧾 Load users from the Google Sheet
 def load_users():
     try:
         sheet = spreadsheet.worksheet(USER_SHEET_TAB)
         data = sheet.get_all_records()
-        users = {}
-        for row in data:
-            users[row["username"].strip().lower()] = {
+        users = {
+            row["username"].strip().lower(): {
                 "password": str(row["password"]),
                 "sheet": row["sheet"]
-            }
+            } for row in data
+        }
         return users
     except:
         return {}
 
-# ✍️ Save new user to sheet
 def save_user(username, password, sheet_tab_name):
     sheet = spreadsheet.worksheet(USER_SHEET_TAB)
     sheet.append_row([username, password, sheet_tab_name])
@@ -100,7 +141,6 @@ def logout():
     session.pop("guest", None)
     return redirect(url_for("login"))
 
-# 🧠 Risk calculator with recommendation
 def calculate_risk(pitches, days_rest, age, height_in, weight_lb):
     max_pitches = 95 if age > 14 else 75
     fatigue_score = (pitches / max_pitches) * (1 if days_rest < 2 else 0.7)
@@ -111,23 +151,16 @@ def calculate_risk(pitches, days_rest, age, height_in, weight_lb):
 
     if fatigue_score > 0.9:
         risk = "High"
-        recommendation = (
-            "🚨 High Risk: Rest 3–4 days. No throwing. Ice arm, stretch, and consult a sports therapist."
-        )
+        recommendation = "🚨 High Risk: Rest 3–4 days. No throwing. Ice arm, stretch, and consult a sports therapist."
     elif fatigue_score > 0.6:
         risk = "Medium"
-        recommendation = (
-            "⚠️ Medium Risk: Avoid intense throwing. Rest 2 days. Hydrate and use recovery bands."
-        )
+        recommendation = "⚠️ Medium Risk: Avoid intense throwing. Rest 2 days. Hydrate and use recovery bands."
     else:
         risk = "Low"
-        recommendation = (
-            "✅ Low Risk: Keep regular warm-ups and monitor pitch count."
-        )
+        recommendation = "✅ Low Risk: Keep regular warm-ups and monitor pitch count."
 
     return risk, round(bmi, 1), recommendation
 
-# 📤 Send to sheet
 def send_to_sheet(sheet_name, data_row):
     ws = spreadsheet.worksheet(sheet_name)
     ws.append_row(data_row)
@@ -179,7 +212,6 @@ def export_csv():
     records = sheet.get_all_records()
     recent_20 = records[-20:] if len(records) >= 20 else records
 
-    # Create a CSV in memory
     output = StringIO()
     writer = csv.DictWriter(output, fieldnames=recent_20[0].keys())
     writer.writeheader()
@@ -194,4 +226,5 @@ def export_csv():
     )
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=81)
+    port = int(os.environ.get("PORT", 81))
+    app.run(host='0.0.0.0', port=port)
