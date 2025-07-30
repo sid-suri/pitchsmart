@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login – PitchSmart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 80px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        form {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            width: 320px;
+            margin-bottom: 15px;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #003049;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #001f33;
+        }
+
+        .link {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .link a {
+            color: #003049;
+            text-decoration: none;
+        }
+
+        .link a:hover {
+            text-decoration: underline;
+        }
+
+        .guest-button {
+            background-color: #6c757d;
+        }
+
+        .guest-button:hover {
+            background-color: #5a6268;
+        }
+
+        .warning {
+            color: #856404;
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            padding: 10px 15px;
+            margin-top: -5px;
+            margin-bottom: 30px;
+            border-radius: 6px;
+            font-size: 0.95em;
+            text-align: center;
+            width: 320px;
+        }
+
+        @media screen and (max-width: 480px) {
+            body {
+                padding: 20px;
+            }
+
+            form, .card, .filters input, .filters select, table, .warning, .container {
+                width: 100% !important;
+                max-width: 100% !important;
+                box-sizing: border-box;
+            }
+
+            th, td {
+                font-size: 14px;
+                padding: 8px;
+            }
+
+            .filters {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .filters label, .filters input, .filters select {
+                margin: 6px 0;
+                width: 100%;
+            }
+
+            .btn, button, .back-btn, .csv-btn, a.button {
+                width: 100%;
+                margin: 5px 0;
+                font-size: 1em;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            header p {
+                font-size: 1em;
+                padding: 0 10px;
+            }
+
+            .top-actions {
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .top-actions form {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h2>Login to PitchSmart</h2>
+
+    <!-- Coach Login Form -->
+    <form method="POST" action="/login">
+        <input type="text" name="username" placeholder="Username" required />
+        <input type="password" name="password" placeholder="Password" required />
+        <button type="submit">Login</button>
+        <div class="link">
+            <p>New coach? <a href="/signup">Sign up</a></p>
+        </div>
+    </form>
+
+    <!-- Guest Access Form (no inputs required) -->
+    <form method="POST" action="/login">
+        <input type="hidden" name="guest" value="true">
+        <button class="guest-button" type="submit">Continue as Guest</button>
+    </form>
+
+    <!-- Guest warning message -->
+    <div class="warning">
+        ⚠️ As a guest, your pitch data will not be saved and you won't have access to past records.
+    </div>
+</body>
+</html>

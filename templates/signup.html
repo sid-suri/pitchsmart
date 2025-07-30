@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sign Up – PitchSmart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 80px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        form {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            width: 320px;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0 5px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1em;
+        }
+
+        .validation-message {
+            font-size: 0.9em;
+            color: red;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #003049;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #001f33;
+        }
+
+        .link {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .link a {
+            color: #003049;
+            text-decoration: none;
+        }
+
+        .link a:hover {
+            text-decoration: underline;
+        }
+        @media screen and (max-width: 480px) {
+            body {
+                padding: 20px;
+            }
+
+            form, .card, .filters input, .filters select, table, .warning, .container {
+                width: 100% !important;
+                max-width: 100% !important;
+                box-sizing: border-box;
+            }
+
+            th, td {
+                font-size: 14px;
+                padding: 8px;
+            }
+
+            .filters {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .filters label, .filters input, .filters select {
+                margin: 6px 0;
+                width: 100%;
+            }
+
+            .btn, button, .back-btn, .csv-btn, a.button {
+                width: 100%;
+                margin: 5px 0;
+                font-size: 1em;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            header p {
+                font-size: 1em;
+                padding: 0 10px;
+            }
+
+            .top-actions {
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .top-actions form {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h2>Create a PitchSmart Account</h2>
+    <form method="POST" onsubmit="return validateForm();">
+        <input type="text" id="username" name="username" placeholder="Username" required />
+        <div class="validation-message" id="username-warning">Username already taken</div>
+
+        <input type="password" name="password" placeholder="Password" required />
+
+        <button type="submit">Sign Up</button>
+        <div class="link">
+            <p>Already have an account? <a href="/login">Login here</a></p>
+        </div>
+    </form>
+
+    <script>
+        const usernameInput = document.getElementById("username");
+        const warning = document.getElementById("username-warning");
+
+        usernameInput.addEventListener("input", function () {
+            const username = usernameInput.value.trim().toLowerCase();
+
+            if (username.length < 3) {
+                warning.style.display = "none";
+                return;
+            }
+
+            fetch(`/check-username?username=${encodeURIComponent(username)}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.exists) {
+                        warning.style.display = "block";
+                    } else {
+                        warning.style.display = "none";
+                    }
+                })
+                .catch(err => {
+                    console.error("Username check failed:", err);
+                });
+        });
+
+        function validateForm() {
+            if (warning.style.display === "block") {
+                alert("Please choose a different username.");
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>

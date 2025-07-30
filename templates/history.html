@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PitchSmart – History</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+            padding: 40px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #003049;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            text-decoration: none;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #001f33;
+        }
+
+        .top-buttons {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .filters {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .filters select, .filters input[type="text"] {
+            padding: 8px;
+            font-size: 14px;
+            margin: 0 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            cursor: pointer;
+            background-color: #003049;
+            color: white;
+        }
+
+        th:hover {
+            background-color: #001f33;
+        }
+
+        .risk-high {
+            background-color: #f8d7da;
+            color: #a70000;
+            font-weight: bold;
+        }
+
+        .risk-medium {
+            background-color: #fff3cd;
+            color: #b36b00;
+            font-weight: bold;
+        }
+
+        .risk-low {
+            background-color: #d4edda;
+            color: #006400;
+            font-weight: bold;
+        }
+      @media screen and (max-width: 480px) {
+          body {
+              padding: 20px;
+          }
+
+          form, .card, .filters input, .filters select, table, .warning, .container {
+              width: 100% !important;
+              max-width: 100% !important;
+              box-sizing: border-box;
+          }
+
+          th, td {
+              font-size: 14px;
+              padding: 8px;
+          }
+
+          .filters {
+              flex-direction: column;
+              align-items: center;
+          }
+
+          .filters label, .filters input, .filters select {
+              margin: 6px 0;
+              width: 100%;
+          }
+
+          .btn, button, .back-btn, .csv-btn, a.button {
+              width: 100%;
+              margin: 5px 0;
+              font-size: 1em;
+          }
+
+          header h1 {
+              font-size: 1.8em;
+          }
+
+          header p {
+              font-size: 1em;
+              padding: 0 10px;
+          }
+
+          .top-actions {
+              flex-direction: column;
+              align-items: center;
+              gap: 8px;
+          }
+
+          .top-actions form {
+              width: 100%;
+          }
+      }
+    </style>
+</head>
+<body>
+
+    <h2>Pitch History (Last 20 Entries)</h2>
+
+    <div class="top-buttons">
+        <a href="/" class="btn">← Back to Home</a>
+        <a href="/export" class="btn" style="margin-left: 20px;">⬇️ Export CSV</a>
+    </div>
+
+    <div class="filters">
+        <label for="playerFilter">Filter by Player:</label>
+        <input type="text" id="playerFilter" placeholder="Type name...">
+        
+        <label for="riskFilter">Filter by Risk:</label>
+        <select id="riskFilter">
+            <option value="">All</option>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+        </select>
+    </div>
+
+    <table id="historyTable">
+        <thead>
+            <tr>
+                <th onclick="sortTable(0)">Player</th>
+                <th onclick="sortTable(1)">Age</th>
+                <th onclick="sortTable(2)">Pitches</th>
+                <th onclick="sortTable(3)">Days Rest</th>
+                <th onclick="sortTable(4)">Risk</th>
+                <th onclick="sortTable(5)">BMI</th>
+                <th onclick="sortTable(6)">Timestamp</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in records %}
+            <tr class="data-row">
+                <td>{{ row["Player"] }}</td>
+                <td>{{ row["Age"] }}</td>
+                <td>{{ row["Pitches"] }}</td>
+                <td>{{ row["Days Rest"] }}</td>
+                <td class="risk-cell">{{ row["Risk"] }}</td>
+                <td>{{ row["BMI"] }}</td>
+                <td>{{ row["Timestamp"] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+        function sortTable(columnIndex) {
+            const table = document.getElementById("historyTable");
+            const tbody = table.tBodies[0];
+            const rows = Array.from(tbody.rows);
+            const isNumeric = !isNaN(rows[0].cells[columnIndex].innerText);
+
+            const sortedRows = rows.sort((a, b) => {
+                const valA = a.cells[columnIndex].innerText;
+                const valB = b.cells[columnIndex].innerText;
+                return isNumeric
+                    ? parseFloat(valA) - parseFloat(valB)
+                    : valA.localeCompare(valB);
+            });
+
+            tbody.innerHTML = "";
+            sortedRows.forEach(row => tbody.appendChild(row));
+        }
+
+        // 🎨 Risk-level color coding
+        document.querySelectorAll('.risk-cell').forEach(cell => {
+            const value = cell.innerText.trim().toLowerCase();
+            if (value === 'high') {
+                cell.classList.add('risk-high');
+            } else if (value === 'medium') {
+                cell.classList.add('risk-medium');
+            } else if (value === 'low') {
+                cell.classList.add('risk-low');
+            }
+        });
+
+        // 🔍 Filter logic – always re-evaluate from full dataset
+        document.getElementById("playerFilter").addEventListener("input", filterTable);
+        document.getElementById("riskFilter").addEventListener("change", filterTable);
+
+        function filterTable() {
+            const playerInput = document.getElementById("playerFilter").value.toLowerCase();
+            const selectedRisk = document.getElementById("riskFilter").value.toLowerCase();
+
+            const rows = document.querySelectorAll("#historyTable tbody tr");
+
+            rows.forEach(row => {
+                const playerText = row.cells[0].innerText.toLowerCase();
+                const riskText = row.cells[4].innerText.toLowerCase();
+
+                const playerMatch = !playerInput || playerText.includes(playerInput);
+                const riskMatch = !selectedRisk || riskText === selectedRisk;
+
+                row.style.display = playerMatch && riskMatch ? "" : "none";
+            });
+        }
+    </script>
+
+</body>
+</html>

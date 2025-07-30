@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Signup Error – PitchSmart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 80px;
+        }
+
+        .box {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            width: 360px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #d62828;
+        }
+
+        p {
+            margin: 20px 0;
+            font-size: 1.1em;
+        }
+
+        button {
+            padding: 12px 24px;
+            background-color: #003049;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #001f33;
+        }
+        @media screen and (max-width: 480px) {
+            body {
+                padding: 20px;
+            }
+
+            form, .card, .filters input, .filters select, table, .warning, .container {
+                width: 100% !important;
+                max-width: 100% !important;
+                box-sizing: border-box;
+            }
+
+            th, td {
+                font-size: 14px;
+                padding: 8px;
+            }
+
+            .filters {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .filters label, .filters input, .filters select {
+                margin: 6px 0;
+                width: 100%;
+            }
+
+            .btn, button, .back-btn, .csv-btn, a.button {
+                width: 100%;
+                margin: 5px 0;
+                font-size: 1em;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            header p {
+                font-size: 1em;
+                padding: 0 10px;
+            }
+
+            .top-actions {
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .top-actions form {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>Username Already Exists</h2>
+        <p>The username "<strong>{{ username }}</strong>" is already taken. Please choose a different one.</p>
+        <a href="/signup"><button>Back to Signup</button></a>
+    </div>
+</body>
+</html>
