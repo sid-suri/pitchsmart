@@ -53,12 +53,23 @@
       background-color: #1d3557;
     }
 
-    iframe {
-      display: block;
-      margin: 20px auto;
+    .video-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%; /* 16:9 aspect ratio */
+      height: 0;
+      overflow: hidden;
       border-radius: 10px;
-      max-width: 100%;
-      height: 315px;
+      margin: 20px 0;
+    }
+
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
     }
 
     p {
@@ -70,8 +81,8 @@
   <h1>3-Day Recovery Band Routine</h1>
 
   <div class="day">
-    <h2>Day 1: Foundation</h2>
-    <p>Focus on light movements to activate the shoulder and arm muscles:</p>
+    <h2>Day 1</h2>
+    <p>Exercises to do:</p>
     <ul>
       <li>External rotations – 2 sets of 15 reps</li>
       <li>Internal rotations – 2 sets of 15 reps</li>
@@ -81,8 +92,8 @@
   </div>
 
   <div class="day">
-    <h2>Day 2: Strength</h2>
-    <p>Add resistance and slightly increase repetitions to build arm stability:</p>
+    <h2>Day 2</h2>
+    <p>Exercises to do:</p>
     <ul>
       <li>External rotations – 3 sets of 15 reps</li>
       <li>Internal rotations – 3 sets of 15 reps</li>
@@ -93,8 +104,8 @@
   </div>
 
   <div class="day">
-    <h2>Day 3: Endurance & Mobility</h2>
-    <p>Focus on higher repetitions and mobility to prevent stiffness:</p>
+    <h2>Day 3</h2>
+    <p>Exercises to do:</p>
     <ul>
       <li>External rotations – 3 sets of 20 reps</li>
       <li>Internal rotations – 3 sets of 20 reps</li>
@@ -106,11 +117,13 @@
   </div>
 
   <h2 style="text-align:center; margin-top:40px;">Video Guide</h2>
-  <iframe src="https://www.youtube.com/embed/yrgUzW0UK40" 
-          title="Recovery Band Routine" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-          allowfullscreen>
-  </iframe>
+  <div class="video-container">
+    <iframe src="https://www.youtube.com/embed/yrgUzW0UK40" 
+            title="Recovery Band Routine" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+    </iframe>
+  </div>
 
   <a href="/">Back to Home</a>
 </body>
