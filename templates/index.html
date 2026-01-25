@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PitchSmart – Where Baseball Meets Data</title>
+  <title>PitchSmart</title>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <style>
     body {
       margin: 0;
@@ -49,10 +53,6 @@
       color: #003049;
     }
 
-    section.intro p {
-      margin-top: 10px;
-    }
-
     form {
       background: #ffffff;
       padding: 30px;
@@ -88,11 +88,6 @@
       border-radius: 8px;
       cursor: pointer;
       width: 100%;
-      transition: background 0.3s;
-    }
-
-    button:hover {
-      background-color: #d62828;
     }
 
     .pitch-list {
@@ -100,10 +95,7 @@
       padding: 25px;
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    }
-
-    .pitch-list h2 {
-      color: #003049;
+      margin-top: 40px;
     }
 
     ul {
@@ -116,15 +108,7 @@
       padding: 12px 16px;
       border-radius: 6px;
       margin-bottom: 10px;
-      color: #264653;
       font-weight: 500;
-    }
-
-    .no-data {
-      font-style: italic;
-      color: #777;
-      text-align: center;
-      padding: 20px 0;
     }
 
     footer {
@@ -141,145 +125,126 @@
       margin: 10px 20px 0 0;
     }
 
-    .top-actions form {
-      margin: 0;
-      padding: 0;
-      box-shadow: none;
-    }
-
     .top-actions button {
       width: auto;
       padding: 8px 16px;
-      margin-top: 0;
-      font-size: 0.95em;
       background-color: #457b9d;
-    }
-
-    .top-actions button:hover {
-      background-color: #1d3557;
-    }
-
-    @media screen and (max-width: 480px) {
-        body { padding: 20px; }
-        form, .card, .filters input, .filters select, table, .warning, .container {
-            width: 100% !important;
-            max-width: 100% !important;
-            box-sizing: border-box;
-        }
-        th, td { font-size: 14px; padding: 8px; }
-        .filters { flex-direction: column; align-items: center; }
-        .filters label, .filters input, .filters select { margin: 6px 0; width: 100%; }
-        .btn, button, .back-btn, .csv-btn, a.button { width: 100%; margin: 5px 0; font-size: 1em; }
-        header h1 { font-size: 1.8em; }
-        header p { font-size: 1em; padding: 0 10px; }
-        .top-actions { flex-direction: column; align-items: center; gap: 8px; }
-        .top-actions form { width: 100%; }
     }
   </style>
 </head>
+
 <body>
 
-  <header>
-    <h1>PitchSmart</h1>
-    <p>Empowering youth baseball players and coaches by using data to prevent injuries and optimize performance.</p>
-  </header>
+<header>
+  <h1>PitchSmart</h1>
+  <p>Empowering youth baseball players and coaches by using data to prevent injuries.</p>
+</header>
 
-  <div class="top-actions">
-    <form action="/history" method="get">
-      <button type="submit">View History</button>
-    </form>
-    <form action="/logout" method="get">
-      <button type="submit">Logout</button>
-    </form>
-  </div>
+<div class="top-actions">
+  <form action="/history" method="get">
+    <button type="submit">View History</button>
+  </form>
+  <form action="/logout" method="get">
+    <button type="submit">Logout</button>
+  </form>
+</div>
 
-  <div class="container">
-    <section class="intro">
-      <h2>Why PitchSmart?</h2>
-      <p>Youth baseball pitchers are vulnerable to overuse injuries. While pitch count guidelines exist, many decisions around rest and recovery are made based on current success, not protecting arm health. This can lead to arm fatigue, injury, or long-term damage.</p>
-      <p><strong>PitchSmart</strong> is a tool built by Sid Suri after he underwent arm injuries to help coaches and players track pitch counts, monitor recovery, and make better decisions on frequency of pitching.</p>
-    </section>
+<div class="container">
 
-    <form method="POST" action="/">
-      <h2>Submit Pitch Data</h2>
+  <section class="intro">
+    <h2>Why PitchSmart?</h2>
+    <p><strong>PitchSmart</strong> helps pitchers track pitch counts, rest, and recovery to reduce injury risk and extend arm health.</p>
+  </section>
 
-      <label for="player_name">Player Name:</label>
-      <input type="text" id="player_name" name="player_name" required placeholder="e.g., Alex Rodriguez" />
+  <form method="POST" action="/">
+    <h2>Submit Pitch Data</h2>
 
-      <label for="age">Player Age:</label>
-      <input type="number" id="age" name="age" min="5" max="22" required placeholder="e.g., 15" />
+    <label>Player Name</label>
+    <input type="text" name="player_name" required>
 
-      <label for="num_pitches">Number of Pitches:</label>
-      <input type="number" id="num_pitches" name="num_pitches" min="1" required placeholder="e.g., 62" />
+    <label>Age</label>
+    <input type="number" name="age" required>
 
-      <label for="days_rest">Days of Rest:</label>
-      <input type="number" id="days_rest" name="days_rest" min="0" required placeholder="e.g., 2" />
+    <label>Number of Pitches</label>
+    <input type="number" name="num_pitches" required>
 
-      <label for="height">Height (in inches):</label>
-      <input type="number" id="height" name="height" min="40" max="90" required placeholder="e.g., 65" />
+    <label>Days of Rest</label>
+    <input type="number" name="days_rest" required>
 
-      <label for="weight">Weight (in pounds):</label>
-      <input type="number" id="weight" name="weight" min="50" max="300" required placeholder="e.g., 130" />
+    <label>Height (in)</label>
+    <input type="number" name="height" required>
 
-      <button type="submit">Calculate Risk</button>
-    </form>
+    <label>Weight (lbs)</label>
+    <input type="number" name="weight" required>
 
-    {% if risk %}
-      <div style="margin-top: 30px; padding: 20px; border-radius: 8px;
-                  font-size: 1.2em;
-                  background-color:
-                    {% if risk == 'High' %}#ffe5e5
-                    {% elif risk == 'Medium' %}#fff3cd
-                    {% else %}#d4edda
-                    {% endif %};
-                  color:
-                    {% if risk == 'High' %}#d9534f
-                    {% elif risk == 'Medium' %}#856404
-                    {% else %}#155724
-                    {% endif %};">
-        <strong>{{ player }}'s injury risk:</strong> {{ risk }}
-      </div>
-    {% endif %}
+    <button type="submit">Calculate Risk</button>
+  </form>
 
-    {% if tip %}
-      <div style="margin-top: 20px; padding: 15px; border-radius: 8px;
-                  background-color: #f0f0f0; font-style: italic; color: #333;">
-        {{ tip }}
-      </div>
-
-      {% if risk == "Medium" %}
-      <!-- Band Routine Button -->
-      <div style="margin-top: 15px; text-align: center;">
-        <a href="/band-routine" style="
-              background-color: #457b9d;
-              color: white;
-              padding: 12px 20px;
-              border-radius: 8px;
-              text-decoration: none;
-              font-weight: bold;
-              display: inline-block;
-              transition: background 0.3s;">
-          View Band Routine
-        </a>
-      </div>
-      {% endif %}
-    {% endif %}
-
-    {% if pitches %}
-    <div class="pitch-list">
-      <h2>Pitch Log</h2>
-      <ul>
-        {% for entry in pitches %}
-          <li>{{ entry.player }} threw {{ entry.pitches }} pitches on {{ entry.timestamp }} — Risk: {{ entry.risk }}</li>
-        {% endfor %}
-      </ul>
+  {% if risk %}
+    <div style="padding:20px; border-radius:8px; margin-bottom:20px;">
+      <strong>{{ player }} Risk Level:</strong> {{ risk }}
     </div>
-    {% endif %}
-  </div>
+  {% endif %}
 
-  <footer>
-    Built by Sid Suri &middot; PitchSmart
-  </footer>
+  {% if pitches %}
+  <!-- Chart -->
+  <div style="margin: 40px auto;">
+    <h2 style="text-align:center;">Pitch Count Over Time</h2>
+    <canvas id="pitchChart"></canvas>
+  </div>
+  {% endif %}
+
+  {% if pitches %}
+  <div class="pitch-list">
+    <h2>Pitch Log</h2>
+    <ul>
+      {% for entry in pitches %}
+        <li>{{ entry.player }} threw {{ entry.pitches }} pitches on {{ entry.timestamp }} ({{ entry.risk }})</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+
+</div>
+
+<footer>
+  Built by Sid Suri · PitchSmart
+</footer>
+
+{% if pitches %}
+<script>
+  const labels = [
+    {% for entry in pitches %}
+      "{{ entry.timestamp }}",
+    {% endfor %}
+  ];
+
+  const data = [
+    {% for entry in pitches %}
+      {{ entry.pitches }},
+    {% endfor %}
+  ];
+
+  new Chart(document.getElementById("pitchChart"), {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: [{
+        label: "Pitch Count",
+        data: data,
+        borderWidth: 3,
+        tension: 0.3
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+</script>
+{% endif %}
+
 </body>
 </html>
-
