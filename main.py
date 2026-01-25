@@ -148,6 +148,11 @@ def signup():
     return render_template("signup.html")
 
 
+@app.route("/warmup-drills")
+def warmup_drills():
+    return render_template("warmup_drills.html")
+
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
