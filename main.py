@@ -190,7 +190,7 @@ def calculate_risk(pitches, days_rest, age, height_in, weight_lb):
 
     if fatigue_score > 0.9:
         risk = "High"
-        recommendation = "🚨 High Risk: Rest 3–4 days. No throwing. Ice arm, stretch, and consult a sports therapist."
+        recommendation = "🚨 High Risk: Rest 3–4 days. No throwing. Ice arm, stretch, and take rest."
     elif fatigue_score > 0.6:
         risk = "Medium"
         recommendation = "⚠️ Medium Risk: Avoid intense throwing. Rest 2 days. Hydrate and use recovery bands."
