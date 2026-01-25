@@ -158,56 +158,22 @@
     .top-actions button:hover {
       background-color: #1d3557;
     }
-    @media screen and (max-width: 480px) {
-        body {
-            padding: 20px;
-        }
 
+    @media screen and (max-width: 480px) {
+        body { padding: 20px; }
         form, .card, .filters input, .filters select, table, .warning, .container {
             width: 100% !important;
             max-width: 100% !important;
             box-sizing: border-box;
         }
-
-        th, td {
-            font-size: 14px;
-            padding: 8px;
-        }
-
-        .filters {
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .filters label, .filters input, .filters select {
-            margin: 6px 0;
-            width: 100%;
-        }
-
-        .btn, button, .back-btn, .csv-btn, a.button {
-            width: 100%;
-            margin: 5px 0;
-            font-size: 1em;
-        }
-
-        header h1 {
-            font-size: 1.8em;
-        }
-
-        header p {
-            font-size: 1em;
-            padding: 0 10px;
-        }
-
-        .top-actions {
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .top-actions form {
-            width: 100%;
-        }
+        th, td { font-size: 14px; padding: 8px; }
+        .filters { flex-direction: column; align-items: center; }
+        .filters label, .filters input, .filters select { margin: 6px 0; width: 100%; }
+        .btn, button, .back-btn, .csv-btn, a.button { width: 100%; margin: 5px 0; font-size: 1em; }
+        header h1 { font-size: 1.8em; }
+        header p { font-size: 1em; padding: 0 10px; }
+        .top-actions { flex-direction: column; align-items: center; gap: 8px; }
+        .top-actions form { width: 100%; }
     }
   </style>
 </head>
@@ -230,8 +196,8 @@
   <div class="container">
     <section class="intro">
       <h2>Why PitchSmart?</h2>
-      <p>Youth baseball pitchers are  vulnerable to overuse injuries. While pitch count guidelines exist, many decisions around rest and recovery are made based on current success, not protecting arm health. This can lead to arm fatigue, injury, or  long-term damage.</p>
-      <p><strong>PitchSmart</strong> is a  tool built by Sid Suri after he underwent arm injuries to help coaches and players track pitch counts, monitor recovery, and make better decisions on frequency of pitching.</p>
+      <p>Youth baseball pitchers are vulnerable to overuse injuries. While pitch count guidelines exist, many decisions around rest and recovery are made based on current success, not protecting arm health. This can lead to arm fatigue, injury, or long-term damage.</p>
+      <p><strong>PitchSmart</strong> is a tool built by Sid Suri after he underwent arm injuries to help coaches and players track pitch counts, monitor recovery, and make better decisions on frequency of pitching.</p>
     </section>
 
     <form method="POST" action="/">
@@ -280,6 +246,23 @@
                   background-color: #f0f0f0; font-style: italic; color: #333;">
         {{ tip }}
       </div>
+
+      {% if risk == "Medium" %}
+      <!-- Band Routine Button -->
+      <div style="margin-top: 15px; text-align: center;">
+        <a href="/band-routine" style="
+              background-color: #457b9d;
+              color: white;
+              padding: 12px 20px;
+              border-radius: 8px;
+              text-decoration: none;
+              font-weight: bold;
+              display: inline-block;
+              transition: background 0.3s;">
+          View Band Routine
+        </a>
+      </div>
+      {% endif %}
     {% endif %}
 
     {% if pitches %}
@@ -299,3 +282,4 @@
   </footer>
 </body>
 </html>
+

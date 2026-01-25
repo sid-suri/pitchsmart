@@ -1,4 +1,3 @@
-
 import os
 import csv
 import json
@@ -28,31 +27,58 @@ try:
 
     # Ensure private_key has actual line breaks
     if isinstance(creds_dict.get("private_key"), str):
-        creds_dict["private_key"] = creds_dict["private_key"].replace("\n", "\n".replace("\\n", "\n")).replace("\n", "\n").replace("\n", "\n").replace("\n", "\n").replace("\n", "\n").replace("\n", "\n").replace("\n", "\n").replace("\n", "\n").replace("\n", "\n").replace("\n", "\n").replace("\n", "\n")
-        creds_dict["private_key"] = creds_dict["private_key"].replace("\n", "\n").replace("\n", "\n")
-        creds_dict["private_key"] = creds_dict["private_key"].replace("\n", "\n")
-        creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n").replace("\\n", "\n")
-        creds_dict["private_key"] = creds_dict["private_key"].replace("\n", "\n").replace("\n", "\n")
-        creds_dict["private_key"] = creds_dict["private_key"].replace("\n", "\n")
-        creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
-        creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
-        creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
-        creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
-        creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
-        creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
-        creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
-        creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
-        creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
-        creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
-        creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
-        creds_dict["private_key"] = creds_dict["private_key"].replace("\\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace(
+            "\n", "\n".replace("\\n", "\n")).replace("\n", "\n").replace(
+                "\n", "\n").replace("\n", "\n").replace("\n", "\n").replace(
+                    "\n",
+                    "\n").replace("\n", "\n").replace("\n", "\n").replace(
+                        "\n", "\n").replace("\n", "\n").replace("\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace(
+            "\n", "\n").replace("\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace(
+            "\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace(
+            "\\n", "\n").replace("\\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace(
+            "\n", "\n").replace("\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace(
+            "\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace(
+            "\\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace(
+            "\\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace(
+            "\\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace(
+            "\\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace(
+            "\\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace(
+            "\\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace(
+            "\\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace(
+            "\\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace(
+            "\\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace(
+            "\\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace(
+            "\\n", "\n")
+        creds_dict["private_key"] = creds_dict["private_key"].replace(
+            "\\n", "\n")
 
 except Exception as e:
-    raise ValueError(f"❌ Failed to load and decode GOOGLE_CREDENTIALS_BASE64: {e}")
+    raise ValueError(
+        f"❌ Failed to load and decode GOOGLE_CREDENTIALS_BASE64: {e}")
 
 # Google Sheets auth
-scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-credentials = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+scope = [
+    "https://spreadsheets.google.com/feeds",
+    "https://www.googleapis.com/auth/drive"
+]
+credentials = ServiceAccountCredentials.from_json_keyfile_dict(
+    creds_dict, scope)
 client = gspread.authorize(credentials)
 spreadsheet = client.open("PitchSmart Log")
 
@@ -67,6 +93,7 @@ login_manager.login_view = "login"
 
 USER_SHEET_TAB = "Users"
 
+
 def load_users():
     try:
         sheet = spreadsheet.worksheet(USER_SHEET_TAB)
@@ -75,23 +102,29 @@ def load_users():
             row["username"].strip().lower(): {
                 "password": str(row["password"]),
                 "sheet": row["sheet"]
-            } for row in data
+            }
+            for row in data
         }
         return users
     except:
         return {}
 
+
 def save_user(username, password, sheet_tab_name):
     sheet = spreadsheet.worksheet(USER_SHEET_TAB)
     sheet.append_row([username, password, sheet_tab_name])
 
+
 class User(UserMixin):
+
     def __init__(self, username):
         self.id = username
+
 
 @login_manager.user_loader
 def load_user(user_id):
     return User(user_id)
+
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
@@ -105,12 +138,15 @@ def signup():
 
         sheet_tab = f"{username}_Sheet"
         spreadsheet.add_worksheet(title=sheet_tab, rows="100", cols="20")
-        header = ["Player", "Age", "Pitches", "Days Rest", "Risk", "BMI", "Timestamp"]
+        header = [
+            "Player", "Age", "Pitches", "Days Rest", "Risk", "BMI", "Timestamp"
+        ]
         spreadsheet.worksheet(sheet_tab).append_row(header)
         save_user(username, password, sheet_tab)
         return redirect(url_for("login"))
 
     return render_template("signup.html")
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -129,11 +165,13 @@ def login():
             return render_template("invalid.html")
     return render_template("login.html")
 
+
 @app.route("/check-username")
 def check_username():
     username = request.args.get("username", "").strip().lower()
     users = load_users()
     return {"exists": username in users}
+
 
 @app.route("/logout")
 def logout():
@@ -141,10 +179,11 @@ def logout():
     session.pop("guest", None)
     return redirect(url_for("login"))
 
+
 def calculate_risk(pitches, days_rest, age, height_in, weight_lb):
     max_pitches = 95 if age > 14 else 75
     fatigue_score = (pitches / max_pitches) * (1 if days_rest < 2 else 0.7)
-    bmi = (weight_lb / (height_in ** 2)) * 703
+    bmi = (weight_lb / (height_in**2)) * 703
 
     if bmi < 18.5 or bmi > 25:
         fatigue_score *= 1.1
@@ -161,9 +200,11 @@ def calculate_risk(pitches, days_rest, age, height_in, weight_lb):
 
     return risk, round(bmi, 1), recommendation
 
+
 def send_to_sheet(sheet_name, data_row):
     ws = spreadsheet.worksheet(sheet_name)
     ws.append_row(data_row)
+
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -181,17 +222,28 @@ def home():
             height_in = float(request.form['height'])
             weight_lb = float(request.form['weight'])
 
-            risk_level, bmi, recommendation = calculate_risk(pitches, days_rest, age, height_in, weight_lb)
-            timestamp = datetime.now(pytz.timezone("America/Los_Angeles")).strftime("%b %d, %Y %I:%M %p")
+            risk_level, bmi, recommendation = calculate_risk(
+                pitches, days_rest, age, height_in, weight_lb)
+            timestamp = datetime.now(pytz.timezone(
+                "America/Los_Angeles")).strftime("%b %d, %Y %I:%M %p")
 
             if current_user.is_authenticated:
                 users = load_users()
                 sheet_name = users[current_user.id]["sheet"]
-                send_to_sheet(sheet_name, [player_name, age, pitches, days_rest, risk_level, bmi, timestamp])
+                send_to_sheet(sheet_name, [
+                    player_name, age, pitches, days_rest, risk_level, bmi,
+                    timestamp
+                ])
         except ValueError:
             risk_level = "Invalid input. Please enter numbers only."
 
-    return render_template('index.html', risk=risk_level, player=player_name, bmi=bmi, pitches=[], tip=recommendation)
+    return render_template('index.html',
+                           risk=risk_level,
+                           player=player_name,
+                           bmi=bmi,
+                           pitches=[],
+                           tip=recommendation)
+
 
 @app.route('/history')
 @login_required
@@ -202,6 +254,7 @@ def history():
     records = sheet.get_all_records()
     recent_20 = records[-20:] if len(records) >= 20 else records
     return render_template("history.html", records=recent_20)
+
 
 @app.route('/export')
 @login_required
@@ -222,9 +275,14 @@ def export_csv():
     return Response(
         output.getvalue(),
         mimetype="text/csv",
-        headers={"Content-Disposition": f"attachment;filename={filename}"}
-    )
+        headers={"Content-Disposition": f"attachment;filename={filename}"})
+
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 81))
     app.run(host='0.0.0.0', port=port)
+
+
+@app.route("/band-routine")
+def band_routine():
+    return render_template("band_routine.html")
