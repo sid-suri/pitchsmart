@@ -15,6 +15,13 @@
     h1 {
       color: #003049;
       text-align: center;
+      margin-bottom: 40px;
+    }
+
+    h2 {
+      color: #e63946;
+      margin-top: 20px;
+      margin-bottom: 10px;
     }
 
     .day {
@@ -25,28 +32,19 @@
       margin-bottom: 20px;
     }
 
-    .day-header {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      margin-bottom: 15px;
-    }
-
-    .day-label {
+    .day-number {
       font-weight: bold;
-      font-size: 1.2em;
-      color: #e63946;
-      min-width: 70px;
+      margin-bottom: 10px;
+      font-size: 1.1em;
     }
 
     .day-desc {
-      font-size: 1em;
-      color: #1d3557;
+      margin-bottom: 10px;
+      font-style: italic;
     }
 
     ul {
       padding-left: 20px;
-      margin-top: 10px;
     }
 
     li {
@@ -68,15 +66,14 @@
       background-color: #1d3557;
     }
 
+    /* 16:9 responsive video */
     .video-container {
       position: relative;
       width: 100%;
-      max-width: 700px;
+      max-width: 600px;
+      margin: 20px auto;
       padding-bottom: 56.25%; /* 16:9 ratio */
       height: 0;
-      overflow: hidden;
-      border-radius: 10px;
-      margin: 20px auto;
     }
 
     .video-container iframe {
@@ -85,7 +82,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      border: 0;
+      border-radius: 10px;
     }
   </style>
 </head>
@@ -93,10 +90,8 @@
   <h1>3-Day Recovery Band Routine</h1>
 
   <div class="day">
-    <div class="day-header">
-      <div class="day-label">Day 1:</div>
-      <div class="day-desc">Focus on light movements to activate the shoulder and arm muscles:</div>
-    </div>
+    <div class="day-number">Day 1</div>
+    <div class="day-desc">Focus on light movements to activate the shoulder and arm muscles:</div>
     <ul>
       <li>External rotations – 2 sets of 15 reps</li>
       <li>Internal rotations – 2 sets of 15 reps</li>
@@ -106,10 +101,8 @@
   </div>
 
   <div class="day">
-    <div class="day-header">
-      <div class="day-label">Day 2:</div>
-      <div class="day-desc">Add resistance and slightly increase repetitions to build arm stability:</div>
-    </div>
+    <div class="day-number">Day 2</div>
+    <div class="day-desc">Add resistance and slightly increase repetitions to build arm stability:</div>
     <ul>
       <li>External rotations – 3 sets of 15 reps</li>
       <li>Internal rotations – 3 sets of 15 reps</li>
@@ -120,10 +113,8 @@
   </div>
 
   <div class="day">
-    <div class="day-header">
-      <div class="day-label">Day 3:</div>
-      <div class="day-desc">Focus on higher repetitions and mobility to prevent stiffness:</div>
-    </div>
+    <div class="day-number">Day 3</div>
+    <div class="day-desc">Focus on higher repetitions and mobility to prevent stiffness:</div>
     <ul>
       <li>External rotations – 3 sets of 20 reps</li>
       <li>Internal rotations – 3 sets of 20 reps</li>
