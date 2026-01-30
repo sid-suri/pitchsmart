@@ -150,7 +150,7 @@ def signup():
 
 @app.route("/warmup-drills")
 def warmup_drills():
-    return render_template("warmup_drills.html")
+    return render_template("warmup-drills.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
